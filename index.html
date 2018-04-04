@@ -10,6 +10,8 @@
   <script language="javascript" type="text/javascript" src="libraries/quicksettings.js"></script>
   <script language="javascript" type="text/javascript" src="libraries/p5.gui.js"></script>
   <script src="https://code.highcharts.com/highcharts.src.js"></script>
+  <link rel="stylesheet" href="libraries/driver.min.css">
+  <script src="libraries/driver.min.js"></script>
   <!-- This line removes any default padding and style. 
        You might only need one of these values set. -->
   <style> 
@@ -40,13 +42,15 @@
 <body>
   <h1>A simple simulation of Chord Algorithm written in pure Javascript</h1>
   <div id="log-panel" style="float:right;">
-      <button type="button" onclick="B.download('file', 'txt')">Download the state</button> 
+      <button type="button" onclick="B.download('file', 'txt')">Download the state</button> | 
+      Number of nodes: <input type="text" id="nn" size="5"/> <button id="btn" type="button">Regenerate the network</button>
       <h3>Logs</h3><ul id="log-ul"></ul></div>
   
   <div id="canvas"></div>
-  <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-  <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-  <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto;  float: left;"></div>
+  <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto; float: left;"></div>
+  <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto; float: left;"></div>
+  <div id="container3" style="min-width: 310px; height: 400px; margin: 0 auto;  float: left;"></div>
   <script language="javascript" type="text/javascript" src="main.js"></script>
   <script language="javascript" type="text/javascript" src="visualization.js"></script>
   <script language="javascript" type="text/javascript" src="chart.js"></script>

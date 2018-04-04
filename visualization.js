@@ -55,6 +55,84 @@ function setup() {
   gui = createGui('Controller', 650, 50);
   gui.addGlobals("node", "drawid", "showText");
   noLoop();
+  var canvas = document.getElementById("defaultCanvas0");
+  
+  driver.defineSteps([
+	{
+	  element: '#defaultCanvas0',
+	  popover: {
+		title: 'Chord Network',
+		description: 'A visualizazion of the network, randomly generated',
+		position: 'right'
+	  }
+	},
+	{
+		element: ".qs_main",
+		popover:{
+			title:"Controllers",
+			description: "The controllers of the networks. Try to change the node to overlight another node's fingerprints",
+			position: "right"
+		}
+	},
+	{
+		element: "#container",
+		popover: {
+			title: "Analysis: 1/4",
+			description: "Here there is shown how many steps (nodes) a query has to travers to find the owner. We expects this value near the log(number_of_nodes)."+
+			"This is the most importart result, that influence the performance, so I underlight it in red.",
+			position: "right"
+		}
+	},
+	{
+		element: "#container1",
+		popover: {
+			title: "Analysis: 2/4",
+			description: "Here there are shown how many times a node has performed a research on its fingerprint. ",
+			position: "left"
+		}
+	},
+	{
+		element: "#container2",
+		popover: {
+			title: "Analysis: 3/4",
+			description: "Which is the distance from a predecessor to a node? Here it is rappresented by the height to the column"+
+			"Of course, larger is the distance, more keys a node owns, more time it is invoke to lookup a key."+
+			"In our model, we expect to have those values equal due the randomess of the nodes. It is not? Try to increase the node number",
+			position: "right"
+		}
+	},
+	{
+		element: "#nn",
+		popover: {
+			title: "Increase the number of the nodes",
+			description: "Try to increase the number of the node to perform a more general analysis. Try with: 100",
+			position: "left"
+		}
+	},
+	{
+		element: "#container3",
+		popover: {
+			title: "Analysis: 4/4",
+			description: "The last one! It shown how many edge a node has: in and out edge. Of course the edge are the id_size"+
+			", i.e. the length of the fingerprint, but here I shown only different out-edge, so if there are 3 fingerprints that are"+
+			"equal, they count 1",
+			position: "left"
+		}
+	},
+	{
+		element: "#btn",
+		popover: {
+			title: "Don't forget to try it!",
+			description: "Oh, don't forget to push this button to apply a new number of nodes! That's all!",
+			position: "left"
+		}
+	}
+  ]);
+  if(document.cookie == ""){
+	document.cookie = "username=chord";
+	driver.start();
+  }
+  document.getElementById("nn").value=proprieties.nodesNumber;
 }
 
 function draw() {
@@ -87,4 +165,14 @@ function draw() {
   	fill(color(255,0, 0));
   	ellipse(x, y, 5, 5);
 	
+}
+
+const driver = new Driver( {animate: true, showButtons: false, allowClose: true, showButtons: true});
+
+document.getElementById("btn").onclick = function(){
+	var val = document.getElementById("nn").value;
+	var n = parseInt(val);
+	if(!isNaN(n)){
+		window.location.replace(location.protocol + '//' + location.host + location.pathname+"?nn="+n);
+	}
 }
