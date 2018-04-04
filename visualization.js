@@ -52,7 +52,7 @@ function setup() {
   text("0", -2, -315);
 
   sliderRange(0, 2**16, 1);
-  gui = createGui('Controller');
+  gui = createGui('Controller', 650, 50);
   gui.addGlobals("node", "drawid", "showText");
   noLoop();
 }

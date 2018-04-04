@@ -1,8 +1,8 @@
 var statistics = new Array();
 /* Setup parameters */
 let proprieties = {
-	addressSize: 16, //Multiple of 8
-	nodesNumber: 2000
+	addressSize: 16, // If this number is too big, the number 2**addressSize may overflow the number size
+	nodesNumber: 20
 }
 
 var url = new URL(window.location.href);
@@ -184,6 +184,6 @@ B.println("EXECUTING SAMPLES")
 
 chord.samples.forEach( (e, i) => {
 	var res = chord.nodes[i].lookup(e.randomKey);
-	B.println(`Node ${chord.nodes[i].id} found ${res} as owner of ${e.randomKey}`);
+	B.println(`Node [${i}] ${chord.nodes[i].id} found ${res} as owner of ${e.randomKey}`);
 });
 

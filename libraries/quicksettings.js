@@ -162,7 +162,7 @@
 		_createPanel: function(x, y, parent) {
 			this._panel = this._createElement("div", "qs_main", parent || document.body);
 			this._panel.style.zIndex = ++QuickSettings._topZ;
-			this.setPosition(x || 0, y || 0);
+			this.setPosition(x || 100, y || 100);
 			this._controls = {};
 		},
 
