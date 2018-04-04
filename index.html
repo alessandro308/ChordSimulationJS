@@ -1,0 +1,52 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
+  <script language="javascript" type="text/javascript" src="SHA1.js"></script>
+  <script language="javascript" type="text/javascript" src="bignumber.js"></script>
+  <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
+  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/quicksettings.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/p5.gui.js"></script>
+  <script src="https://code.highcharts.com/highcharts.src.js"></script>
+  <!-- This line removes any default padding and style. 
+       You might only need one of these values set. -->
+  <style> 
+    body {
+      padding: 0; 
+      margin: 0;
+    }
+    #log-panel{
+      background-color: #505050;
+      margin: 30px;
+      width: 500px;
+      padding-left: 10px;
+      padding-right: 10px;
+      color:white;
+      max-height: 70%;
+      overflow-y: scroll;
+    } 
+    #log ul {
+      font-family: monospace;
+    }
+    #controls {
+      margin: 10px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div id="log-panel" style="float:right;">
+      <button type="button" onclick="B.download('file', 'txt')">Download the state</button> 
+      <h3>Logs</h3><ul id="log-ul"></ul></div>
+  
+  <div id="canvas"></div>
+  <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  <script language="javascript" type="text/javascript" src="main.js"></script>
+  <script language="javascript" type="text/javascript" src="visualization.js"></script>
+  <script language="javascript" type="text/javascript" src="chart.js"></script>
+</body>
+</html>
