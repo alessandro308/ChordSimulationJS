@@ -2,7 +2,7 @@
   "name": "my-project",
   "version": "1.0.0",
   "scripts": {
-    "build": "./node_modules/.bin/babel libraries_new -d libraries"
+    "build": "./node_modules/.bin/babel src -d lib"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

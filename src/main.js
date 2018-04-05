@@ -1,9 +1,10 @@
 var statistics = new Array();
 /* Setup parameters */
-let proprieties = {
+const proprieties = {
 	addressSize: 16, // If this number is too big, the number 2**addressSize may overflow the number size
 	nodesNumber: 20
 }
+const MAXID = (2**proprieties.addressSize)-1;
 
 var url = new URL(window.location.href);
 var nn = url.searchParams.get("nn");
@@ -66,7 +67,6 @@ class B { //Boilerplate
 			return id<=end && id > start;
 		} else { // Where in the range there is 0
 			// LINEA DELLA MORTE!!!!
-			let maxId = (2**proprieties.addressSize)-1;
 			return this.inRange(id, start, maxId) || this.inRange(id, 0, end);
 		}
 	}

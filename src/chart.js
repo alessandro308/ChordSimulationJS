@@ -92,7 +92,6 @@ for(i=1; i<chord.nodes.length; i++){
     distance[i] = (chord.nodes[i].id - chord.nodes[i-1].id);
 }
 distance[0] = 2**proprieties.addressSize-chord.nodes.lastElement().id + chord.nodes[0].id;
-console.log(distance[0]);
 
 Highcharts.chart('container1', {
     chart: {
@@ -130,6 +129,12 @@ Highcharts.chart('container1', {
     }]
 });
 
+var mean = distance.reduce((prev, curr, i, arra) => {
+    prev += curr;
+    return prev;
+}, 0) / (chord.nodesNumber);
+let maxID = (2**proprieties.addressSize)-1;
+
 Highcharts.chart('container2', {
     chart: {
         type: 'column',
@@ -139,7 +144,7 @@ Highcharts.chart('container2', {
         text: 'Distance between the node and the previous one'
     },
     subtitle: {
-        text: "i.e. The number of keys that a node owns"
+        text: `i.e. The number of keys that a node owns | Mean Value: ${mean} - Expected one: ${maxID/proprieties.nodesNumber}`
     },
     xAxis: {
         title: {
