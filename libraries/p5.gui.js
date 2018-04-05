@@ -1,6 +1,10 @@
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 //
 
-(function() {
+(function () {
 
   // list of guis
   var guis = [];
@@ -14,7 +18,7 @@
   var guiProvider = 'QuickSettings';
 
   // Create a GUI using QuickSettings (or DAT.GUI or ...)
-  p5.prototype.createGui = function(label, x, y, provider) {
+  p5.prototype.createGui = function (label, x, y, provider) {
 
     label = label || 'GUI';
     x = x || 20;
@@ -24,8 +28,8 @@
     var gui;
 
     // create a gui using the provider
-    if(provider === 'QuickSettings') {
-      if(QuickSettings) {
+    if (provider === 'QuickSettings') {
+      if (QuickSettings) {
         console.log('Creating p5.gui powered by QuickSettings.');
         gui = new QSGui(label, x, y);
       } else {
@@ -42,38 +46,35 @@
 
     // return it
     return gui;
-
   };
 
-
-  p5.prototype.removeGui = function(gui) {
+  p5.prototype.removeGui = function (gui) {
     // TODO: implement this
   };
 
   // update defaults used for creation of sliders
-  p5.prototype.sliderRange = function(vmin, vmax, vstep) {
+  p5.prototype.sliderRange = function (vmin, vmax, vstep) {
     sliderMin = vmin;
     sliderMax = vmax;
     sliderStep = vstep;
   };
 
   // extend default behaviour of noLoop()
-  p5.prototype.noLoop = function() {
+  p5.prototype.noLoop = function () {
     this._loop = false;
-    for(var i = 0; i < guis.length; i++) {
+    for (var i = 0; i < guis.length; i++) {
       guis[i].noLoop();
     }
   };
 
   // extend default behaviour of loop()
-  p5.prototype.loop = function() {
-    for(var i = 0; i < guis.length; i++) {
+  p5.prototype.loop = function () {
+    for (var i = 0; i < guis.length; i++) {
       guis[i].loop();
     }
     this._loop = true;
     this._draw();
   };
-
 
   // interface for quicksettings
   function QSGui(label, x, y) {
@@ -82,46 +83,51 @@
     this.prototype = qs;
 
     // addGlobals(global1, global2, ...) to add the selected globals
-    this.addGlobals = function() {
+    this.addGlobals = function () {
       qs.bindGlobals(arguments);
     };
 
     // addObject(object) to add all params of the object
     // addObject(object, param1, param2, ...) to add selected params
-    this.addObject = function() {
+    this.addObject = function () {
       // get object
       object = arguments[0];
       // convert arguments object to array
       var params = [];
-      if(arguments.length > 1) {
-        params = Array.prototype.slice.call(arguments)
+      if (arguments.length > 1) {
+        params = Array.prototype.slice.call(arguments);
         params = params.slice(1);
       }
       // if no arguments are provided take all keys of the object
-      if(params.length === 0) {
+      if (params.length === 0) {
         params = object.keys();
       }
       qs.bindParams(object, params);
     };
 
     // noLoop() to call draw every time the gui changes when we are not looping
-    this.noLoop = function() {
+    this.noLoop = function () {
       qs.setGlobalChangeHandler(draw);
     };
 
-    this.loop = function() {
+    this.loop = function () {
       qs.setGlobalChangeHandler(null);
     };
 
-    this.show = function() { qs.show(); };
-    this.hide = function() { qs.hide(); };
-    this.toggleVisibility = function() { qs.toggleVisibility(); };
-
+    this.show = function () {
+      qs.show();
+    };
+    this.hide = function () {
+      qs.hide();
+    };
+    this.toggleVisibility = function () {
+      qs.toggleVisibility();
+    };
   }
 
   // Just a Dummy object that provides the GUI interface
   function DummyGui() {
-    var f = function() {};
+    var f = function f() {};
     this.addGlobals = f;
     this.noLoop = f;
     this.addObject = f;
@@ -130,29 +136,29 @@
 
   // Extend Quicksettings
   // so it can magically create a GUI for parameters passed by name
-  QuickSettings.bindParams = function(object, params) {
+  QuickSettings.bindParams = function (object, params) {
 
     // iterate over all the arguments
-    for(var i = 0; i < params.length; i++) {
+    for (var i = 0; i < params.length; i++) {
 
       var arg = params[i];
       var val = object[arg];
-      var typ = typeof val;
+      var typ = typeof val === 'undefined' ? 'undefined' : _typeof(val);
 
       // console.log(typ, arg, val);
 
-      switch(typ) {
+      switch (typ) {
 
         case 'object':
 
           // color triple ?
-          if(val instanceof Array && val.length === 3 && typeof val[0] === 'number') {
+          if (val instanceof Array && val.length === 3 && typeof val[0] === 'number') {
             // create color according to the current color mode
             var c = color(val[0], val[1], val[2]);
             // get decimal RGB values
-            var c2 = c.levels.slice(0,3);
+            var c2 = c.levels.slice(0, 3);
             // create HTML color code
-            var vcolor = '#' + c2.map(function(value) {
+            var vcolor = '#' + c2.map(function (value) {
               return ('0' + value.toString(16)).slice(-2);
             }).join('');
             this.bindColor(arg, vcolor, object);
@@ -182,7 +188,7 @@
         case 'string':
 
           var HEX6 = /^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i;
-          if(HEX6.test(val)) {
+          if (HEX6.test(val)) {
             // HTML color value (such as #ff0000)
             this.bindColor(arg, val, object);
           } else {
@@ -201,8 +207,7 @@
   };
 
   // bind params that are defined globally
-  QuickSettings.bindGlobals = function(params) {
+  QuickSettings.bindGlobals = function (params) {
     this.bindParams(window, params);
   };
-
 })();
