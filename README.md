@@ -1,7 +1,7 @@
 # ChordSimulationJS
 
-<img src="{{ site.url }}/assets/img/post-image/chord.png" style="width: 200px; height: auto; float:left"/>
-This project is developed as mid-term for P2P Course, one of my Master Degree's course. The assignment is to develop a chord simulation and analyse the topology and the network performance.
+<img src="https://apagiaro.it/assets/img/post-image/chord.png" style="width: 200px; height: auto; float:left"/>
+This project is developed as mid-term for P2P Course, one of my Master Degree's course. The assignment is to develop a chord simulation and analyse the topology and the network performance. I've added a graphic interface to explain how this algorithm works and how the fingerprinters are built.
 First of all, in order to replay to my colleague, why I've chosen Javascript? Because in the last period I've found various features and libraries that I wanted to try, moreover there was not language constraint on this assignment... so, JAVASCRIPT! 
 
 The project is online [here](https://apagiaro.it/chord/).
