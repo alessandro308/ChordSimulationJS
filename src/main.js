@@ -28,7 +28,7 @@ Array.prototype.lastElement = function(){
 }
 BigNumber.config({ POW_PRECISION: 200, EXPONENTIAL_AT: 100 })
 let random = function(start, end){ //Big Number random
-	return (BigNumber.random().times((end.minus(start)))).integerValue().plus(start); 
+	return (BigNumber.random().times((end.minus(start)))).integerValue().plus(start);
 }
 
 /* Initialization and support functions */
@@ -52,8 +52,8 @@ class B { //Boilerplate
 			a.click();
 			setTimeout(function() {
 				document.body.removeChild(a);
-				window.URL.revokeObjectURL(url);  
-			}, 0); 
+				window.URL.revokeObjectURL(url);
+			}, 0);
 		}
 		chord.nodes.forEach(e => e.manager = chord);
 	}
@@ -78,7 +78,7 @@ class B { //Boilerplate
     }
 
     static random(start, end){
-		return (BigNumber.random().times((end.minus(start)))).integerValue().plus(start); 
+		return (BigNumber.random().times((end.minus(start)))).integerValue().plus(start);
     }
 
 }
@@ -88,7 +88,7 @@ const maxId = 2**proprieties.addressSize;
 class Chord { //Main object, coordinator of the system
 	constructor(addressSize, nodesNumber){
 		this.nodes = new Array(nodesNumber); // Nodes array
-		this.addressSize = addressSize; 
+		this.addressSize = addressSize;
 		this.nodesNumber = nodesNumber;
 		var maxId = (new BigNumber(2)).pow(addressSize);
 		var nodeIds = [];
@@ -100,7 +100,7 @@ class Chord { //Main object, coordinator of the system
 			nodeIds.push(id);
 			this.nodes[i] = { //Initialization of the node
 				manager: this, // Pointer to the coordinator
-				id: id, 
+				id: id,
 				successor: 0,
 				predecessor: 0,
 				finger: [],
@@ -140,7 +140,7 @@ class Chord { //Main object, coordinator of the system
 			node.successor = this.nodes[(i+1)%nodesNumber].id;
 			node.predecessor = this.nodes[(i+nodesNumber-1)%nodesNumber].id;
 			node.finger[0]=this.nodes[i].id;
-			
+
 			for(let i = 1; i<=addressSize; i++){ //Compute the fingerprints for each node
 				let nx2_powi = Math.floor((node.id+2**(i-1))%maxId);
 				let succ = this.findSuccessor(nx2_powi);
@@ -186,4 +186,3 @@ chord.samples.forEach( (e, i) => {
 	var res = chord.nodes[i].lookup(e.randomKey);
 	B.println(`Node [${i}] ${chord.nodes[i].id} found ${res} as owner of ${e.randomKey}`);
 });
-

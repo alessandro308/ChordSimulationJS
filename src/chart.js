@@ -12,7 +12,7 @@ var counting = statistics.map(e => e.steps.length).reduce(function (acc, curr) {
     } else {
       acc[curr] += 1;
     }
-  
+
     return acc;
   }, {});
 var series = [];
@@ -21,7 +21,7 @@ for(let i = 0; i<=max_val-min_val; i++){
     series[i] = counting[i+min_val];
 }
 
-var subtext = 'Computed on this simulation, every time this page is loaded' + 
+var subtext = 'Computed on this simulation, every time this page is loaded' +
     ` - Remamber: log(node_number=${proprieties.nodesNumber})=`+Math.log(proprieties.nodesNumber);
 
 /*Number of step to find the owner of a key*/
@@ -192,7 +192,7 @@ chord.nodes.forEach( (e,i) =>{
 
 
 for(let i = 0; i<proprieties.nodesNumber; i++){
-    data3[i].in = nodeInEdge[chord.nodes[i].id].count; 
+    data3[i].in = nodeInEdge[chord.nodes[i].id].count;
 }
 console.log(data3);
 

@@ -13,13 +13,13 @@ function removeDuplicates(arr){
 }
 
 function drawFingerprint(_node, color){
-	let a = map(_node.id, 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;  
+	let a = map(_node.id, 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;
 	let x = 300*cos(a);
 	let y = 300*sin(a);
   	let fingerIds = removeDuplicates(_node.finger);
 
   	for(let i = 0; i<fingerIds.length; i++){
-  		let a1 = map(fingerIds[i], 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;  
+  		let a1 = map(fingerIds[i], 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;
   		let x1 = 300*cos(a1);
   		let y1 = 300*sin(a1);
   		stroke(color);
@@ -36,7 +36,7 @@ function setup() {
   background(0xf0f0f0);
   translate(width/2, height/2);
   for(let i = 0; i<chord.nodesNumber; i++){
-  	let a = map(chord.nodes[i].id, 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;  	
+  	let a = map(chord.nodes[i].id, 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;
   	let x = 300*cos(a);
   	let y = 300*sin(a);
   	textSize(12);
@@ -56,7 +56,7 @@ function setup() {
   gui.addGlobals("node", "drawid", "showText");
   noLoop();
   var canvas = document.getElementById("defaultCanvas0");
-  
+
   driver.defineSteps([
 	{
 	  element: '#defaultCanvas0',
@@ -138,7 +138,7 @@ function setup() {
 function draw() {
 	background(0xf0f0f0);
 	for(let i = 0; i<chord.nodesNumber; i++){
-		let a = map(chord.nodes[i].id, 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;  	
+		let a = map(chord.nodes[i].id, 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;
 		let x = 300*cos(a);
 		let y = 300*sin(a);
 		if(showText){
@@ -159,12 +159,12 @@ function draw() {
 	}
 	drawFingerprint(chord.getNodeById(parseInt(node)), color(255, 0, 0));
   	let val = drawid;
-  	let a = map(val, 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;  	
+  	let a = map(val, 0, (new BigNumber(2)).pow(chord.addressSize).toNumber(), 0, TWO_PI)-HALF_PI;
   	let x = 300*cos(a);
   	let y = 300*sin(a);
   	fill(color(255,0, 0));
   	ellipse(x, y, 5, 5);
-	
+
 }
 
 const driver = new Driver( {animate: true, showButtons: false, allowClose: true, showButtons: true});
