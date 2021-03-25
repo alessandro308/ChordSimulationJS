@@ -88,7 +88,7 @@ for(let i = 0; i<chord.nodes.length; i++){
 }
 
 var distance = [];
-for(i=1; i<chord.nodes.length; i++){
+for(let i=1; i<chord.nodes.length; i++){
     distance[i] = (chord.nodes[i].id - chord.nodes[i-1].id);
 }
 distance[0] = 2**proprieties.addressSize-chord.nodes.lastElement().id + chord.nodes[0].id;
