@@ -9,17 +9,17 @@ const MAXID = (2**proprieties.addressSize)-1;
 
 /* BEGIN SUPPORT FUNCTIONS */
 var time = 0;
-Array.prototype.toLong = function(){
+function toLong(array){
 	/* Transform byte array into long */
 	var value = 0;
-    for ( var i = this.length - 1; i >= 0; i--) {
-        value = (value * 256) + this[i];
+    for ( var i = array.length - 1; i >= 0; i--) {
+        value = (value * 256) + array[i];
     }
 
     return value;
 }
-Array.prototype.lastElement = function(){
-	return this[this.length-1];
+function lastElement(array){
+	return array[array.length-1];
 }
 BigNumber.config({ POW_PRECISION: 200, EXPONENTIAL_AT: 100 })
 let random = function(start, end){ //Big Number random
@@ -90,7 +90,7 @@ class Chord { //Main object, coordinator of the system
 		for(let i = 0; i<nodesNumber; i++){
 			var id;
 			do{
-				id = sha1.withmodulus(B.random(0, maxId).toString(), addressSize).toLong();
+				id = toLong(sha1.withmodulus(B.random(0, maxId).toString(), addressSize));
 			}while(nodeIds.includes(id));
 			nodeIds.push(id);
 			this.nodes[i] = { //Initialization of the node
@@ -107,7 +107,7 @@ class Chord { //Main object, coordinator of the system
 					return this.finger[i];
 				},
 				_lookup: function(_id){ // Real lookup function
-					statistics.lastElement().steps.push(this.id);
+					lastElement(statistics).steps.push(this.id);
 					if(B.inRange(_id, this.id, this.successor)){
 						return this.successor;
 					}
@@ -152,7 +152,7 @@ class Chord { //Main object, coordinator of the system
 	generateSamples(){
 		this.samples = Array(this.nodesNumber);
 		for(let i = 0; i<this.nodesNumber; i++){
-			this.samples[i] = {randomKey: B.modulus(""+Math.random(), this.addressSize).toLong()};
+			this.samples[i] = {randomKey: toLong(B.modulus(""+Math.random(), this.addressSize))};
 			//B.println(`Node #${i}:${this.nodes[i].id} have to search for ${this.samples[i].randomKey}`);
 		}
 	}
