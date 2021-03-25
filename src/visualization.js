@@ -128,9 +128,9 @@ function setup() {
 		}
 	}
   ]);
-  if(document.cookie == ""){
-	document.cookie = "username=chord";
-	driver.start();
+  if (localStorage.shownInfo !== "1"){
+		localStorage.shownInfo = "1";
+	  driver.start();
   }
   document.getElementById("nn").value=proprieties.nodesNumber;
 }
