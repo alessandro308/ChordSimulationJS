@@ -1,16 +1,11 @@
 var statistics = new Array();
 /* Setup parameters */
+const nn = new URLSearchParams(window.location.search).get("nn");
 const proprieties = {
 	addressSize: 16, // If this number is too big, the number 2**addressSize may overflow the number size
-	nodesNumber: 20
+	nodesNumber: nn ? Number(nn) : 20
 }
 const MAXID = (2**proprieties.addressSize)-1;
-
-var url = new URL(window.location.href);
-var nn = url.searchParams.get("nn");
-if(nn != null){
-	proprieties.nodesNumber = nn;
-}
 
 /* BEGIN SUPPORT FUNCTIONS */
 var time = 0;
