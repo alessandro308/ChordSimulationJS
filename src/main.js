@@ -86,14 +86,14 @@ class Chord { //Main object, coordinator of the system
 				successor: 0,
 				predecessor: 0,
 				finger: [],
-				findPredecessor: function(id){
+				findPredecessor (id) {
 					let i = 0
 					while(i < this.finger.length && !B.inRange(id, this.finger[i], this.finger[(i+1)%this.finger.length])){
 						i++;
 					}
 					return this.finger[i];
 				},
-				_lookup: function(_id){ // Real lookup function
+				_lookup (_id) { // Real lookup function
 					lastElement(statistics).steps.push(this.id);
 					if(B.inRange(_id, this.id, this.successor)){
 						return this.successor;
@@ -103,7 +103,7 @@ class Chord { //Main object, coordinator of the system
 					var res = nod._lookup(_id);
 					return res;
 				},
-				lookup: function(_id){ // Lookup function that produce statistics
+				lookup (_id) { // Lookup function that produce statistics
 					statistics.push({nodeId: this.id, key: id, steps: []});
 					return this._lookup(_id);
 				}
