@@ -1,6 +1,6 @@
 var statistics = new Array();
 /* Setup parameters */
-const nn = new URLSearchParams(window.location.search).get("nn");
+const nn = new URLSearchParams(location.search).get("nn");
 const proprieties = {
 	addressSize: 16, // If this number is too big, the number 2**addressSize may overflow the number size
 	nodesNumber: nn ? Number(nn) : 20
@@ -25,15 +25,6 @@ function random() {
 
 /* BEGIN SUPPORT FUNCTIONS */
 var time = 0;
-function toLong(array){
-	/* Transform byte array into long */
-	var value = 0;
-    for ( var i = array.length - 1; i >= 0; i--) {
-        value = (value * 256) + array[i];
-    }
-
-    return value;
-}
 function lastElement(array){
 	return array[array.length-1];
 }
@@ -56,7 +47,7 @@ class B { //Boilerplate
 		a.click();
 		setTimeout(function() {
 			document.body.removeChild(a);
-			window.URL.revokeObjectURL(url);
+			URL.revokeObjectURL(url);
 		}, 0);
 		chord.nodes.forEach(e => e.manager = chord);
 	}
