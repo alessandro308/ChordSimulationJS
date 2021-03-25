@@ -6,6 +6,22 @@ const proprieties = {
 	nodesNumber: nn ? Number(nn) : 20
 }
 const MAXID = (2**proprieties.addressSize)-1;
+const uint8 = new Uint8Array(20)
+
+/** @param {Uint8Array} buffer */
+function buf2hex (buffer) {
+	return [...buffer].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+/** @param {string} hex */
+function hex2int (hex) {
+	return BigInt('0x' + hex);
+}
+
+function random() {
+	const bigInt = hex2int(buf2hex(crypto.getRandomValues(uint8)))
+	return Number(BigInt.asUintN(proprieties.addressSize, bigInt))
+}
 
 /* BEGIN SUPPORT FUNCTIONS */
 var time = 0;
@@ -20,10 +36,6 @@ function toLong(array){
 }
 function lastElement(array){
 	return array[array.length-1];
-}
-BigNumber.config({ POW_PRECISION: 200, EXPONENTIAL_AT: 100 })
-let random = function(start, end){ //Big Number random
-	return (BigNumber.random().times((end.minus(start)))).integerValue().plus(start);
 }
 
 /* Initialization and support functions */
@@ -65,17 +77,6 @@ class B { //Boilerplate
 			return this.inRange(id, start, maxId) || this.inRange(id, 0, end);
 		}
 	}
-
-	static modulus(x, m){
-      let hash = sha1.create();
-      hash.update(x);
-      return hash.digest(x).slice(20-Math.floor(m/8));
-    }
-
-    static random(start, end){
-		return (BigNumber.random().times((end.minus(start)))).integerValue().plus(start);
-    }
-
 }
 /* END SUPPORT FUNCTIONS*/
 
@@ -85,13 +86,12 @@ class Chord { //Main object, coordinator of the system
 		this.nodes = new Array(nodesNumber); // Nodes array
 		this.addressSize = addressSize;
 		this.nodesNumber = nodesNumber;
-		var maxId = (new BigNumber(2)).pow(addressSize);
 		var nodeIds = [];
-		for(let i = 0; i<nodesNumber; i++){
-			var id;
-			do{
-				id = toLong(sha1.withmodulus(B.random(0, maxId).toString(), addressSize));
-			}while(nodeIds.includes(id));
+		for (let i = 0; i<nodesNumber; i++) {
+			let id;
+			do {
+				id = random()
+			} while (nodeIds.includes(id));
 			nodeIds.push(id);
 			this.nodes[i] = { //Initialization of the node
 				manager: this, // Pointer to the coordinator
@@ -152,7 +152,7 @@ class Chord { //Main object, coordinator of the system
 	generateSamples(){
 		this.samples = Array(this.nodesNumber);
 		for(let i = 0; i<this.nodesNumber; i++){
-			this.samples[i] = {randomKey: toLong(B.modulus(""+Math.random(), this.addressSize))};
+			this.samples[i] = { randomKey: random() };
 			//B.println(`Node #${i}:${this.nodes[i].id} have to search for ${this.samples[i].randomKey}`);
 		}
 	}
