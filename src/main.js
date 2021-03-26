@@ -1,34 +1,32 @@
 var statistics = new Array();
 /* Setup parameters */
+const nn = new URLSearchParams(location.search).get("nn");
 const proprieties = {
 	addressSize: 16, // If this number is too big, the number 2**addressSize may overflow the number size
-	nodesNumber: 20
+	nodesNumber: nn ? Number(nn) : 20
 }
 const MAXID = (2**proprieties.addressSize)-1;
+const uint8 = new Uint8Array(20)
 
-var url = new URL(window.location.href);
-var nn = url.searchParams.get("nn");
-if(nn != null){
-	proprieties.nodesNumber = nn;
+/** @param {Uint8Array} buffer */
+function buf2hex (buffer) {
+	return [...buffer].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+/** @param {string} hex */
+function hex2int (hex) {
+	return BigInt('0x' + hex);
+}
+
+function random() {
+	const bigInt = hex2int(buf2hex(crypto.getRandomValues(uint8)))
+	return Number(BigInt.asUintN(proprieties.addressSize, bigInt))
 }
 
 /* BEGIN SUPPORT FUNCTIONS */
 var time = 0;
-Array.prototype.toLong = function(){
-	/* Transform byte array into long */
-	var value = 0;
-    for ( var i = this.length - 1; i >= 0; i--) {
-        value = (value * 256) + this[i];
-    }
-
-    return value;
-}
-Array.prototype.lastElement = function(){
-	return this[this.length-1];
-}
-BigNumber.config({ POW_PRECISION: 200, EXPONENTIAL_AT: 100 })
-let random = function(start, end){ //Big Number random
-	return (BigNumber.random().times((end.minus(start)))).integerValue().plus(start); 
+function lastElement(array){
+	return array[array.length-1];
 }
 
 /* Initialization and support functions */
@@ -41,20 +39,16 @@ class B { //Boilerplate
 		chord.nodes.forEach(e => e.manager = null);
 		var data = JSON.stringify(chord);
 		var file = new Blob([data], {type: type});
-		if (window.navigator.msSaveOrOpenBlob) // IE10+
-			window.navigator.msSaveOrOpenBlob(file, filename);
-		else { // Others
-			var a = document.createElement("a"),
-					url = URL.createObjectURL(file);
-			a.href = url;
-			a.download = filename;
-			document.body.appendChild(a);
-			a.click();
-			setTimeout(function() {
-				document.body.removeChild(a);
-				window.URL.revokeObjectURL(url);  
-			}, 0); 
-		}
+		var a = document.createElement("a"),
+				url = URL.createObjectURL(file);
+		a.href = url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		setTimeout(function() {
+			document.body.removeChild(a);
+			URL.revokeObjectURL(url);
+		}, 0);
 		chord.nodes.forEach(e => e.manager = chord);
 	}
 
@@ -70,17 +64,6 @@ class B { //Boilerplate
 			return this.inRange(id, start, maxId) || this.inRange(id, 0, end);
 		}
 	}
-
-	static modulus(x, m){
-      let hash = sha1.create();
-      hash.update(x);
-      return hash.digest(x).slice(20-Math.floor(m/8));
-    }
-
-    static random(start, end){
-		return (BigNumber.random().times((end.minus(start)))).integerValue().plus(start); 
-    }
-
 }
 /* END SUPPORT FUNCTIONS*/
 
@@ -88,31 +71,30 @@ const maxId = 2**proprieties.addressSize;
 class Chord { //Main object, coordinator of the system
 	constructor(addressSize, nodesNumber){
 		this.nodes = new Array(nodesNumber); // Nodes array
-		this.addressSize = addressSize; 
+		this.addressSize = addressSize;
 		this.nodesNumber = nodesNumber;
-		var maxId = (new BigNumber(2)).pow(addressSize);
 		var nodeIds = [];
-		for(let i = 0; i<nodesNumber; i++){
-			var id;
-			do{
-				id = sha1.withmodulus(B.random(0, maxId).toString(), addressSize).toLong();
-			}while(nodeIds.includes(id));
+		for (let i = 0; i<nodesNumber; i++) {
+			let id;
+			do {
+				id = random()
+			} while (nodeIds.includes(id));
 			nodeIds.push(id);
 			this.nodes[i] = { //Initialization of the node
 				manager: this, // Pointer to the coordinator
-				id: id, 
+				id: id,
 				successor: 0,
 				predecessor: 0,
 				finger: [],
-				findPredecessor: function(id){
+				findPredecessor (id) {
 					let i = 0
 					while(i < this.finger.length && !B.inRange(id, this.finger[i], this.finger[(i+1)%this.finger.length])){
 						i++;
 					}
 					return this.finger[i];
 				},
-				_lookup: function(_id){ // Real lookup function
-					statistics.lastElement().steps.push(this.id);
+				_lookup (_id) { // Real lookup function
+					lastElement(statistics).steps.push(this.id);
 					if(B.inRange(_id, this.id, this.successor)){
 						return this.successor;
 					}
@@ -121,7 +103,7 @@ class Chord { //Main object, coordinator of the system
 					var res = nod._lookup(_id);
 					return res;
 				},
-				lookup: function(_id){ // Lookup function that produce statistics
+				lookup (_id) { // Lookup function that produce statistics
 					statistics.push({nodeId: this.id, key: id, steps: []});
 					return this._lookup(_id);
 				}
@@ -140,7 +122,7 @@ class Chord { //Main object, coordinator of the system
 			node.successor = this.nodes[(i+1)%nodesNumber].id;
 			node.predecessor = this.nodes[(i+nodesNumber-1)%nodesNumber].id;
 			node.finger[0]=this.nodes[i].id;
-			
+
 			for(let i = 1; i<=addressSize; i++){ //Compute the fingerprints for each node
 				let nx2_powi = Math.floor((node.id+2**(i-1))%maxId);
 				let succ = this.findSuccessor(nx2_powi);
@@ -157,7 +139,7 @@ class Chord { //Main object, coordinator of the system
 	generateSamples(){
 		this.samples = Array(this.nodesNumber);
 		for(let i = 0; i<this.nodesNumber; i++){
-			this.samples[i] = {randomKey: B.modulus(""+Math.random(), this.addressSize).toLong()};
+			this.samples[i] = { randomKey: random() };
 			//B.println(`Node #${i}:${this.nodes[i].id} have to search for ${this.samples[i].randomKey}`);
 		}
 	}
@@ -186,4 +168,3 @@ chord.samples.forEach( (e, i) => {
 	var res = chord.nodes[i].lookup(e.randomKey);
 	B.println(`Node [${i}] ${chord.nodes[i].id} found ${res} as owner of ${e.randomKey}`);
 });
-
